@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Privacy & Trust - Odyxy</title>
+    <link rel="icon" href="resources/odyxy_logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-space-navy: #0B1426;
+            --neural-teal: #2DD4BF;
+            --organic-green: #9710b9;
+            --warm-amber: #F59E0B;
+            --subtle-purple: #8B5CF6;
+            --pure-white: #FFFFFF;
+            --soft-gray: #F8FAFC;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--deep-space-navy);
+            color: var(--pure-white);
+            overflow-x: hidden;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--neural-teal);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neural-teal);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .principle-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .principle-card:hover {
+            border-color: var(--neural-teal);
+            box-shadow: 0 12px 40px rgba(45, 212, 191, 0.2);
+            transform: translateY(-4px);
+        }
+        
+        .principle-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 24px;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(45, 212, 191, 0.3);
+        }
+        
+        .tech-demo {
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 16px;
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            overflow: hidden;
+        }
+        
+        .device-visualization {
+            position: relative;
+            background: linear-gradient(135deg, rgba(45, 212, 191, 0.1), rgba(16, 185, 129, 0.1));
+            border-radius: 20px;
+            padding: 40px;
+            margin: 20px;
+        }
+        
+        .device-frame {
+            width: 200px;
+            height: 350px;
+            background: #1E293B;
+            border-radius: 20px;
+            margin: 0 auto;
+            position: relative;
+            border: 3px solid #475569;
+            overflow: hidden;
+        }
+        
+        .device-screen {
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0B1426, #1E293B);
+            border-radius: 17px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .data-particle {
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            background: var(--neural-teal);
+            border-radius: 50%;
+            animation: floatInside 4s infinite ease-in-out;
+        }
+        
+        @keyframes floatInside {
+            0%, 100% { transform: translate(20px, 50px); opacity: 0.6; }
+            25% { transform: translate(150px, 100px); opacity: 1; }
+            50% { transform: translate(100px, 200px); opacity: 0.8; }
+            75% { transform: translate(50px, 150px); opacity: 1; }
+        }
+        
+        .shield {
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            width: 60px;
+            height: 60px;
+            background: linear-gradient(135deg, var(--organic-green), var(--neural-teal));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.1); }
+        }
+        
+        .comparison-metric {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid rgba(45, 212, 191, 0.2);
+        }
+        
+        .comparison-metric:last-child {
+            border-bottom: none;
+        }
+        
+        .metric-label {
+            font-weight: 500;
+            color: var(--pure-white);
+        }
+        
+        .metric-value {
+            font-weight: 600;
+            padding: 4px 12px;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+        
+        .metric-positive {
+            background: rgba(16, 185, 129, 0.2);
+            color: var(--organic-green);
+        }
+        
+        .metric-negative {
+            background: rgba(239, 68, 68, 0.2);
+            color: #EF4444;
+        }
+        
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal-element.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stagger-delay-1 { transition-delay: 0.1s; }
+        .stagger-delay-2 { transition-delay: 0.2s; }
+        .stagger-delay-3 { transition-delay: 0.3s; }
+        .stagger-delay-4 { transition-delay: 0.4s; }
+        
+        .trust-indicator {
+            background: rgba(16, 185, 129, 0.1);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .trust-icon {
+            width: 48px;
+            height: 48px;
+            background: var(--organic-green);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 12px;
+            font-size: 20px;
+        }
+        
+        .logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .logo-brand img {
+            height: 40px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-brand:hover img {
+            transform: scale(1.05);
+        }
+        
+        .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        /* Mobile menu styles */
+        .mobile-menu { position: fixed; inset: 0; display: flex; justify-content: flex-end; z-index: 60; pointer-events: none; }
+        .mobile-menu .menu-panel { width: 300px; max-width: 85%; height: 100%; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(6px); box-shadow: -12px 0 40px rgba(2,6,23,0.6); transform: translateX(100%); transition: transform 280ms ease, opacity 240ms ease; display: flex; flex-direction: column; gap: 12px; padding: 20px; pointer-events: auto; }
+        .mobile-menu.open .menu-panel { transform: translateX(0); }
+        .mobile-menu-backdrop { position: absolute; inset: 0; background: rgba(2,6,23,0.6); opacity: 0; transition: opacity 240ms ease; pointer-events: none; }
+        .mobile-menu.open .mobile-menu-backdrop { opacity: 1; pointer-events: auto; }
+        .mobile-menu a { color: var(--pure-white); text-decoration: none; font-size: 1rem; padding: 10px 6px; border-radius: 8px; display: block; }
+        .mobile-menu a:focus, .mobile-menu a:hover { background: rgba(45,212,191,0.06); color: var(--neural-teal); outline: none; }
+        .mobile-menu .close-btn { background: transparent; border: none; color: var(--pure-white); align-self: flex-end; padding: 8px; cursor: pointer; }
+        body.mobile-menu-open { overflow: hidden; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="logo-brand">
+                    <img src="resources/odyxy_logo.png" alt="Odyxy Logo">
+                    <span class="brand-name">Odyxy</span>
+                </a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium">Home</a>
+                    <a href="index.html#features" class="nav-link text-sm font-medium">Features</a>
+                    <a href="organizations.html" class="nav-link text-sm font-medium">For Organizations</a>
+                    <a href="advertisers.html" class="nav-link text-sm font-medium">For Advertisers</a>
+                    <a href="privacy.html" class="nav-link text-sm font-medium text-neural-teal">Privacy & Trust</a>
+                    <a href="contact.html" class="nav-link text-sm font-medium">Contact</a>
+                </div>
+                <button class="md:hidden text-white" id="mobile-menu-btn">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-6">
+                    We Collect 
+                    <span class="text-gradient">Nothing</span>. 
+                    You Control 
+                    <span class="text-gradient">Everything</span>.
+                </h1>
+                <p class="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
+                    Privacy isn't a feature—it's our foundation. Experience true digital freedom with 
+                    on-device intelligence that keeps your data where it belongs: under your control.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal-element stagger-delay-1">
+                    <img src="resources/on-device-ai.png" alt="On-Device AI" class="w-full rounded-2xl shadow-2xl">
+                </div>
+                
+                <div class="reveal-element stagger-delay-2">
+                    <h2 class="font-display text-3xl font-semibold mb-6">
+                        On-Device Intelligence
+                    </h2>
+                    <p class="text-lg text-slate-300 mb-8 leading-relaxed">
+                        Your personal AI assistant lives entirely on your device. It learns your preferences, 
+                        organizes your conversations, and enhances your experience—all without sending a single byte of your data to the cloud.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Zero data collection or tracking</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Military-grade end-to-end encryption</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Works offline without internet</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Open-source transparency</span>
+                        </div>
+                    </div>
+                    
+                    <button class="cta-button" onclick="scrollToSection('tech-demo')">
+                        See How It Works
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Technology Demo Section -->
+    <section id="tech-demo" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Your Data Stays With You
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    Visualize how Odyxy processes information entirely on your device, creating a secure bubble around your digital life.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 reveal-element stagger-delay-1">
+                    <div class="tech-demo p-8">
+                        <div class="device-visualization">
+                            <div class="device-frame">
+                                <div class="device-screen">
+                                    <div class="data-particle" style="animation-delay: 0s;"></div>
+                                    <div class="data-particle" style="animation-delay: 1s;"></div>
+                                    <div class="data-particle" style="animation-delay: 2s;"></div>
+                                    <div class="data-particle" style="animation-delay: 3s;"></div>
+                                    <div class="absolute inset-4 bg-gradient-to-br from-neural-teal/20 to-organic-green/20 rounded-lg flex items-center justify-center">
+                                        <div class="text-center">
+                                            <div class="text-2xl mb-2">🧠</div>
+                                            <div class="text-sm font-semibold">Local AI</div>
+                                            <div class="text-xs text-slate-400">Processing</div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="shield">
+                                🔒
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 text-center">
+                            <h3 class="font-display text-xl font-semibold mb-4">On-Device Processing</h3>
+                            <p class="text-slate-300">
+                                All your messages, preferences, and insights are processed locally. 
+                                Nothing leaves your device without your explicit permission.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal-element stagger-delay-2">
+                    <div class="principle-card h-full">
+                        <h3 class="font-display text-xl font-semibold mb-6">Privacy Comparison</h3>
+                        
+                        <div class="comparison-metric">
+                            <span class="metric-label">Data Collection</span>
+                            <span class="metric-value metric-positive">Zero</span>
+                        </div>
+                        
+                        <div class="comparison-metric">
+                            <span class="metric-label">Cloud Processing</span>
+                            <span class="metric-value metric-positive">None</span>
+                        </div>
+                        
+                        <div class="comparison-metric">
+                            <span class="metric-label">User Tracking</span>
+                            <span class="metric-value metric-positive">Disabled</span>
+                        </div>
+                        
+                        <div class="comparison-metric">
+                            <span class="metric-label">Data Sharing</span>
+                            <span class="metric-value metric-positive">Never</span>
+                        </div>
+                        
+                        <div class="comparison-metric">
+                            <span class="metric-label">Encryption</span>
+                            <span class="metric-value metric-positive">End-to-End</span>
+                        </div>
+                        
+                        <div class="comparison-metric">
+                            <span class="metric-label">Offline Access</span>
+                            <span class="metric-value metric-positive">Full</span>
+                        </div>
+                        
+                        <div class="mt-6 p-4 bg-organic-green/10 rounded-lg">
+                            <div class="text-organic-green font-semibold mb-2">Trust Score: 100%</div>
+                            <div class="text-sm text-slate-300">Independent Privacy Audit</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Principles Section -->
+    <section class="py-20 bg-slate-800/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Our Privacy Principles
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    Five fundamental principles that guide every decision we make about your privacy and data.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="principle-card reveal-element stagger-delay-1">
+                    <div class="principle-icon">🔒</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Zero Data Collection</h3>
+                    <p class="text-slate-300 mb-6">
+                        We don't collect, store, or process your personal data. Your conversations, preferences, and behavior patterns remain exclusively on your device.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">No Exceptions</div>
+                </div>
+                
+                <div class="principle-card reveal-element stagger-delay-2">
+                    <div class="principle-icon">🏠</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Local Processing</h3>
+                    <p class="text-slate-300 mb-6">
+                        All AI processing happens on your device. Our semantic intelligence learns and adapts to you without ever sending data to external servers.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">100% On-Device</div>
+                </div>
+                
+                <div class="principle-card reveal-element stagger-delay-3">
+                    <div class="principle-icon">🔐</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Military Encryption</h3>
+                    <p class="text-slate-300 mb-6">
+                        End-to-end encryption protects every message, call, and interaction. Even if data were intercepted, it would be unreadable.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">AES-256 Standard</div>
+                </div>
+                
+                <div class="principle-card reveal-element stagger-delay-4">
+                    <div class="principle-icon">👁️</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Radical Transparency</h3>
+                    <p class="text-slate-300 mb-6">
+                        Open-source code allows anyone to verify our privacy claims. No hidden algorithms, no secret data collection, no backdoors.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Open Source</div>
+                </div>
+                
+                <div class="principle-card reveal-element stagger-delay-5">
+                    <div class="principle-icon">⚡</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">User Control</h3>
+                    <p class="text-slate-300 mb-6">
+                        You have complete control over your data. Export, modify, or delete everything at any time. No questions asked.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Full Autonomy</div>
+                </div>
+                
+                <div class="principle-card reveal-element stagger-delay-4">
+                    <div class="principle-icon">🌐</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Offline Capability</h3>
+                    <p class="text-slate-300 mb-6">
+                        Works perfectly without internet connection. Your privacy and functionality don't depend on connectivity or cloud services.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Always Available</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Trust Indicators Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Independently Verified Trust
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    Our privacy claims are backed by independent audits by the community and developers.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="trust-indicator reveal-element stagger-delay-1">
+                    <div class="trust-icon">✅</div>
+                    <h3 class="font-semibold text-white mb-2">Privacy Audit</h3>
+                    <p class="text-sm text-slate-300">Confirmed by independent users and developers </p>
+                </div>
+                
+                <div class="trust-indicator reveal-element stagger-delay-2">
+                    <div class="trust-icon">🏆</div>
+                    <h3 class="font-semibold text-white mb-2">GDPR Compliant</h3>
+                    <p class="text-sm text-slate-300">Exceeds European privacy standards</p>
+                </div>
+                
+                <div class="trust-indicator reveal-element stagger-delay-3">
+                    <div class="trust-icon">🔍</div>
+                    <h3 class="font-semibold text-white mb-2">Open Source</h3>
+                    <p class="text-sm text-slate-300">Code available for public verification</p>
+                </div>
+                
+                <div class="trust-indicator reveal-element stagger-delay-4">
+                    <div class="trust-icon">🛡️</div>
+                    <h3 class="font-semibold text-white mb-2">Zero Trust</h3>
+                    <p class="text-sm text-slate-300">No data collection verified</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Privacy Calculator Section -->
+    <section class="py-20 bg-slate-800/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Calculate Your Privacy
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    See how much data traditional platforms collect compared to Odyxy's zero-data approach.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12">
+                <div class="reveal-element stagger-delay-1">
+                    <div class="principle-card">
+                        <h3 class="font-display text-xl font-semibold mb-6">Data Collection Calculator</h3>
+                        
+                        <div class="space-y-4">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Activity Type</label>
+                                <select id="activity-type" class="form-input" onchange="calculatePrivacy()">
+                                    <option value="messaging">Daily Messaging</option>
+                                    <option value="browsing">Web Browsing</option>
+                                    <option value="social">Social Media</option>
+                                    <option value="shopping">Online Shopping</option>
+                                    <option value="streaming">Video Streaming</option>
+                                </select>
+                            </div>
+                            
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Duration (hours per day)</label>
+                                <input type="range" id="duration" min="1" max="12" value="3" class="w-full" onchange="calculatePrivacy()">
+                                <div class="flex justify-between text-sm text-slate-400 mt-1">
+                                    <span>1h</span>
+                                    <span id="duration-value">3h</span>
+                                    <span>12h</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="mt-8 p-6 bg-slate-900/50 rounded-lg">
+                            <h4 class="font-semibold text-white mb-4">Privacy Impact</h4>
+                            <div id="privacy-results">
+                                <!-- Results will be populated by JavaScript -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal-element stagger-delay-2">
+                    <div id="privacy-chart" class="h-96 principle-card"></div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Experience True Privacy
+                </h2>
+                <p class="text-xl text-slate-300 mb-12 max-w-2xl mx-auto">
+                    Join the privacy revolution. Experience digital communication that respects your rights and protects your data.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <button class="cta-button text-lg px-8 py-4" onclick="showComingSoon()">
+                        Get Early Access
+                    </button>
+                    <button class="secondary-button text-lg px-8 py-4" onclick="window.location.href='contact.html'">
+                        Learn More
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="font-display text-2xl font-semibold text-gradient mb-4">
+                    Odyxy
+                </div>
+                <p class="text-slate-400 mb-4">
+                    The Intelligent Platform for Private, Purposeful Connection
+                </p>
+                <p class="text-sm text-slate-500">
+                    © 2025 Odyxy. Built with privacy, designed for humanity.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize reveal animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const revealElements = document.querySelectorAll('.reveal-element');
+            
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            revealElements.forEach(element => {
+                revealObserver.observe(element);
+            });
+            
+            // Initialize privacy chart
+            initializePrivacyChart();
+            
+            // Initial privacy calculation
+            calculatePrivacy();
+        });
+        
+        function initializePrivacyChart() {
+            const chartContainer = document.getElementById('privacy-chart');
+            if (!chartContainer) return;
+            
+            const chart = echarts.init(chartContainer);
+            
+            const option = {
+                backgroundColor: 'transparent',
+                title: {
+                    text: 'Data Collection Comparison',
+                    textStyle: {
+                        color: '#FFFFFF',
+                        fontSize: 16,
+                        fontWeight: 'bold'
+                    },
+                    left: 'center',
+                    top: 20
+                },
+                tooltip: {
+                    trigger: 'axis',
+                    backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                    borderColor: '#2DD4BF',
+                    textStyle: {
+                        color: '#FFFFFF'
+                    }
+                },
+                legend: {
+                    data: ['Traditional Apps', 'Odyxy'],
+                    bottom: 20,
+                    textStyle: {
+                        color: '#94A3B8'
+                    }
+                },
+                xAxis: {
+                    type: 'category',
+                    data: ['Messages', 'Location', 'Contacts', 'Browsing', 'Purchases', 'Behavior'],
+                    axisLabel: {
+                        color: '#94A3B8',
+                        fontSize: 10
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#475569'
+                        }
+                    }
+                },
+                yAxis: {
+                    type: 'value',
+                    name: 'Data Points',
+                    axisLabel: {
+                        color: '#94A3B8'
+                    },
+                    axisLine: {
+                        lineStyle: {
+                            color: '#475569'
+                        }
+                    },
+                    splitLine: {
+                        lineStyle: {
+                            color: '#374151'
+                        }
+                    }
+                },
+                series: [
+                    {
+                        name: 'Traditional Apps',
+                        type: 'bar',
+                        data: [1500, 800, 600, 2000, 400, 1200],
+                        itemStyle: {
+                            color: '#EF4444'
+                        }
+                    },
+                    {
+                        name: 'Odyxy',
+                        type: 'bar',
+                        data: [0, 0, 0, 0, 0, 0],
+                        itemStyle: {
+                            color: '#10B981'
+                        }
+                    }
+                ]
+            };
+            
+            chart.setOption(option);
+            
+            // Handle window resize
+            window.addEventListener('resize', () => {
+                chart.resize();
+            });
+        }
+        
+        function calculatePrivacy() {
+            const activityType = document.getElementById('activity-type').value;
+            const duration = document.getElementById('duration').value;
+            
+            // Update duration display
+            document.getElementById('duration-value').textContent = duration + 'h';
+            
+            // Data collection estimates for traditional apps (data points per hour)
+            const dataRates = {
+                messaging: 50,
+                browsing: 200,
+                social: 300,
+                shopping: 150,
+                streaming: 100
+            };
+            
+            const traditionalCollection = dataRates[activityType] * duration;
+            const odyxyCollection = 0;
+            
+            // Update results
+            const resultsContainer = document.getElementById('privacy-results');
+            resultsContainer.innerHTML = `
+                <div class="comparison-metric">
+                    <span class="metric-label">Traditional Apps</span>
+                    <span class="metric-value metric-negative">${traditionalCollection} data points</span>
+                </div>
+                <div class="comparison-metric">
+                    <span class="metric-label">Odyxy</span>
+                    <span class="metric-value metric-positive">${odyxyCollection} data points</span>
+                </div>
+                <div class="mt-4 p-4 bg-organic-green/10 rounded-lg">
+                    <div class="text-organic-green font-semibold mb-1">Privacy Saved: 100%</div>
+                    <div class="text-sm text-slate-300">Your personal information stays private</div>
+                </div>
+            `;
+        }
+        
+        function showComingSoon() {
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-slate-900 rounded-2xl p-8 max-w-md mx-4 border border-neural-teal">
+                    <h3 class="font-display text-2xl font-bold text-white mb-4">Coming Soon!</h3>
+                    <p class="text-slate-300 mb-6">
+                        Odyxy is currently in development. Join our waitlist to be notified when we launch.
+                    </p>
+                    <div class="flex gap-4">
+                        <button onclick="window.location.href='contact.html'" class="cta-button flex-1">
+                            Join Waitlist
+                        </button>
+                        <button onclick="closeModal()" class="secondary-button flex-1">
+                            Close
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+        }
+        
+        function closeModal() {
+            const modal = document.querySelector('.fixed.inset-0');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>

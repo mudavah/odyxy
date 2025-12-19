@@ -1,0 +1,892 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="backend-endpoint" content="<?php echo getenv('BACKEND_ENDPOINT'); ?>">
+    <title>Contact & Join - Odyxy</title>
+    <link rel="icon" href="resources/odyxy_logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-space-navy: #0B1426;
+            --neural-teal: #2DD4BF;
+            --organic-green: #9710b9;
+            --warm-amber: #F59E0B;
+            --subtle-purple: #8B5CF6;
+            --pure-white: #FFFFFF;
+            --soft-gray: #F8FAFC;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--deep-space-navy);
+            color: var(--pure-white);
+            overflow-x: hidden;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--neural-teal);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neural-teal);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .contact-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .contact-card:hover {
+            border-color: var(--neural-teal);
+            box-shadow: 0 12px 40px rgba(45, 212, 191, 0.2);
+            transform: translateY(-4px);
+        }
+        
+        .contact-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 24px;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(45, 212, 191, 0.3);
+        }
+        
+        .secondary-button {
+            background: transparent;
+            border: 2px solid var(--neural-teal);
+            border-radius: 12px;
+            padding: 14px 30px;
+            color: var(--neural-teal);
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .secondary-button:hover {
+            background: var(--neural-teal);
+            color: white;
+        }
+        
+        .form-input {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--neural-teal);
+            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: #94A3B8;
+        }
+        
+        .form-select {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .form-select:focus {
+            outline: none;
+            border-color: var(--neural-teal);
+            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.1);
+        }
+        
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal-element.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stagger-delay-1 { transition-delay: 0.1s; }
+        .stagger-delay-2 { transition-delay: 0.2s; }
+        .stagger-delay-3 { transition-delay: 0.3s; }
+        .stagger-delay-4 { transition-delay: 0.4s; }
+        
+        .tab-button {
+            padding: 12px 24px;
+            border-radius: 8px;
+            background: transparent;
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            color: #94A3B8;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .tab-button.active {
+            background: var(--neural-teal);
+            color: white;
+            border-color: var(--neural-teal);
+        }
+        
+        .tab-content {
+            display: none;
+        }
+        
+        .tab-content.active {
+            display: block;
+        }
+        
+        .social-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 48px;
+            height: 48px;
+            background: rgba(45, 212, 191, 0.1);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 12px;
+            color: var(--neural-teal);
+            transition: all 0.3s ease;
+            text-decoration: none;
+        }
+        
+        .social-link:hover {
+            background: var(--neural-teal);
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .logo-brand img {
+            height: 40px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-brand:hover img {
+            transform: scale(1.05);
+        }
+        
+        .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        /* Mobile menu styles */
+        .mobile-menu { position: fixed; inset: 0; display: flex; justify-content: flex-end; z-index: 60; pointer-events: none; }
+        .mobile-menu .menu-panel { width: 300px; max-width: 85%; height: 100%; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(6px); box-shadow: -12px 0 40px rgba(2,6,23,0.6); transform: translateX(100%); transition: transform 280ms ease, opacity 240ms ease; display: flex; flex-direction: column; gap: 12px; padding: 20px; pointer-events: auto; }
+        .mobile-menu.open .menu-panel { transform: translateX(0); }
+        .mobile-menu-backdrop { position: absolute; inset: 0; background: rgba(2,6,23,0.6); opacity: 0; transition: opacity 240ms ease; pointer-events: none; }
+        .mobile-menu.open .mobile-menu-backdrop { opacity: 1; pointer-events: auto; }
+        .mobile-menu a { color: var(--pure-white); text-decoration: none; font-size: 1rem; padding: 10px 6px; border-radius: 8px; display: block; }
+        .mobile-menu a:focus, .mobile-menu a:hover { background: rgba(45,212,191,0.06); color: var(--neural-teal); outline: none; }
+        .mobile-menu .close-btn { background: transparent; border: none; color: var(--pure-white); align-self: flex-end; padding: 8px; cursor: pointer; }
+        body.mobile-menu-open { overflow: hidden; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="logo-brand">
+                    <img src="resources/odyxy_logo.png" alt="Odyxy Logo">
+                    <span class="brand-name">Odyxy</span>
+                </a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium">Home</a>
+                    <a href="index.html#features" class="nav-link text-sm font-medium">Features</a>
+                    <a href="organizations.html" class="nav-link text-sm font-medium">For Organizations</a>
+                    <a href="advertisers.html" class="nav-link text-sm font-medium">For Advertisers</a>
+                    <a href="privacy.html" class="nav-link text-sm font-medium">Privacy & Trust</a>
+                    <a href="contact.html" class="nav-link text-sm font-medium text-neural-teal">Contact</a>
+                </div>
+                <button class="md:hidden text-white" id="mobile-menu-btn">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-6">
+                    Join the 
+                    <span class="text-gradient">Odyssey</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
+                    Ready to experience the future of private, purposeful connection? Get in touch with our team 
+                    and become part of the privacy revolution.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                <div class="contact-card reveal-element stagger-delay-1">
+                    <div class="contact-icon">🚀</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Early Access</h3>
+                    <p class="text-slate-300 mb-6">
+                        Be among the first to experience Odyxy. Join our beta program and help shape the future of private communication.
+                    </p>
+                    <button class="cta-button w-full" onclick="switchTab('beta'); scrollToForms();">
+                        Join Beta
+                    </button>
+                </div>
+                
+                <div class="contact-card reveal-element stagger-delay-2">
+                    <div class="contact-icon">🤝</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Partnerships</h3>
+                    <p class="text-slate-300 mb-6">
+                        Interested in partnering with Odyxy? Whether you're an organization, brand, or developer, we'd love to hear from you.
+                    </p>
+                    <button class="secondary-button w-full" onclick="switchTab('partnership'); scrollToForms();">
+                        Partner With Us
+                    </button>
+                </div>
+                
+                <div class="contact-card reveal-element stagger-delay-3">
+                    <div class="contact-icon">💬</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">General Inquiry</h3>
+                    <p class="text-slate-300 mb-6">
+                        Have questions about Odyxy? Want to learn more about our privacy-first approach? Our team is here to help.
+                    </p>
+                    <button class="secondary-button w-full" onclick="switchTab('general'); scrollToForms();">
+                        Get In Touch
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Forms Section -->
+    <section class="py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <!-- Tab Navigation -->
+            <div class="flex justify-center mb-12 reveal-element">
+                <div class="flex space-x-4 bg-slate-800/50 p-2 rounded-lg">
+                    <button class="tab-button active" onclick="switchTab('beta')" id="beta-tab">
+                        Beta Access
+                    </button>
+                    <button class="tab-button" onclick="switchTab('partnership')" id="partnership-tab">
+                        Partnership
+                    </button>
+                    <button class="tab-button" onclick="switchTab('general')" id="general-tab">
+                        General Contact
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Beta Access Form -->
+            <div id="beta-form" class="tab-content active reveal-element stagger-delay-1">
+                <div class="contact-card">
+                    <h3 class="font-display text-2xl font-semibold mb-6 text-center">Join the Beta Program</h3>
+                    <form id="beta-access-form" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+                                <input type="text" class="form-input" placeholder="Enter your full name" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+                                <input type="email" class="form-input" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Device Type</label>
+                                <select class="form-select" required>
+                                    <option value="">Select device</option>
+                                    <option value="ios">iPhone/iPad</option>
+                                    <option value="android">Android Phone/Tablet</option>
+                                    <option value="desktop">Desktop Computer</option>
+                                    <option value="multiple">Multiple Devices</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Usage Frequency</label>
+                                <select class="form-select" required>
+                                    <option value="">Select frequency</option>
+                                    <option value="heavy">Daily heavy usage</option>
+                                    <option value="moderate">Several times per week</option>
+                                    <option value="light">Occasional use</option>
+                                    <option value="testing">Just for testing</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Primary Interest</label>
+                            <select class="form-select" required>
+                                <option value="">Select your main interest</option>
+                                <option value="privacy">Privacy features</option>
+                                <option value="collaboration">Collaboration tools</option>
+                                <option value="ai">AI assistance</option>
+                                <option value="messaging">Secure messaging</option>
+                                <option value="all">All features</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Experience with Privacy Tools</label>
+                            <select class="form-select" required>
+                                <option value="">Select experience level</option>
+                                <option value="beginner">New to privacy tools</option>
+                                <option value="intermediate">Some experience</option>
+                                <option value="advanced">Very experienced</option>
+                                <option value="expert">Privacy professional</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">What interests you most about Odyxy?</label>
+                            <textarea class="form-input h-24 resize-none" placeholder="Tell us what excites you about Odyxy..."></textarea>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <input type="checkbox" id="beta-agreement" class="mt-1" required>
+                            <label for="beta-agreement" class="text-sm text-slate-300">
+                                I agree to provide feedback during the beta period and understand that beta software may have bugs or incomplete features.
+                            </label>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="cta-button">
+                                Join Beta Program
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- Partnership Form -->
+            <div id="partnership-form" class="tab-content reveal-element stagger-delay-2">
+                <div class="contact-card">
+                    <h3 class="font-display text-2xl font-semibold mb-6 text-center">Partnership Inquiry</h3>
+                    <form id="partnership-inquiry-form" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Organization/Company Name</label>
+                                <input type="text" class="form-input" placeholder="Enter organization name" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Partnership Type</label>
+                                <select class="form-select" required>
+                                    <option value="">Select partnership type</option>
+                                    <option value="organization">Organization Partnership</option>
+                                    <option value="advertiser">Brand/Advertising Partnership</option>
+                                    <option value="technical">Technical Integration</option>
+                                    <option value="research">Research Collaboration</option>
+                                    <option value="other">Other Partnership</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Contact Person</label>
+                                <input type="text" class="form-input" placeholder="Full name" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Position/Title</label>
+                                <input type="text" class="form-input" placeholder="Your role" required>
+                            </div>
+                        </div>
+                        
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+                                <input type="email" class="form-input" placeholder="contact@organization.com" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
+                                <input type="tel" class="form-input" placeholder="+1 (555) 123-4567">
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Organization Website</label>
+                            <input type="url" class="form-input" placeholder="https://www.yourorganization.com">
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Partnership Goals</label>
+                            <textarea class="form-input h-32 resize-none" placeholder="Describe your partnership objectives and what you hope to achieve..." required></textarea>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Timeline</label>
+                            <select class="form-select" required>
+                                <option value="">Select timeline</option>
+                                <option value="immediate">Ready to start immediately</option>
+                                <option value="month">Within the next month</option>
+                                <option value="quarter">Within the next quarter</option>
+                                <option value="year">Within the next year</option>
+                                <option value="exploring">Just exploring options</option>
+                            </select>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <input type="checkbox" id="partnership-agreement" class="mt-1" required>
+                            <label for="partnership-agreement" class="text-sm text-slate-300">
+                                I understand that Odyxy operates on privacy-first principles and commit to respecting user privacy in any partnership activities.
+                            </label>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="cta-button">
+                                Submit Partnership Inquiry
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            
+            <!-- General Contact Form -->
+            <div id="general-form" class="tab-content reveal-element stagger-delay-3">
+                <div class="contact-card">
+                    <h3 class="font-display text-2xl font-semibold mb-6 text-center">Get In Touch</h3>
+                    <form id="general-contact-form" class="space-y-6">
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Full Name</label>
+                                <input type="text" class="form-input" placeholder="Enter your full name" required>
+                            </div>
+                            <div>
+                                <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+                                <input type="email" class="form-input" placeholder="your@email.com" required>
+                            </div>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Subject</label>
+                            <select class="form-select" required>
+                                <option value="">Select inquiry type</option>
+                                <option value="general">General Information</option>
+                                <option value="technical">Technical Support</option>
+                                <option value="press">Press & Media</option>
+                                <option value="investment">Investment Opportunities</option>
+                                <option value="careers">Career Opportunities</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                        
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Message</label>
+                            <textarea class="form-input h-40 resize-none" placeholder="Tell us how we can help you..." required></textarea>
+                        </div>
+                        
+                        <div class="flex items-start space-x-3">
+                            <input type="checkbox" id="contact-agreement" class="mt-1" required>
+                            <label for="contact-agreement" class="text-sm text-slate-300">
+                                I understand that Odyxy respects my privacy and will only use my contact information to respond to this inquiry.
+                            </label>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="cta-button">
+                                Send Message
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Direct Contact Section -->
+    <section class="py-20 bg-slate-800/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Direct Contact Information
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    Prefer to reach out directly? Here are additional ways to connect with the Odyxy team.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div class="text-center reveal-element stagger-delay-1">
+                    <div class="w-16 h-16 bg-neural-teal/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">📧</span>
+                    </div>
+                    <h3 class="font-semibold text-white mb-2">Email</h3>
+                    <p class="text-slate-300 text-sm">odyxy94@gmail.com</p>
+                </div>
+                
+                <div class="text-center reveal-element stagger-delay-2">
+                    <div class="w-16 h-16 bg-neural-teal/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">🐦</span>
+                    </div>
+                    <h3 class="font-semibold text-white mb-2">Twitter</h3>
+                    <p class="text-slate-300 text-sm">@OdyxyPlatform</p>
+                </div>
+                
+                <div class="text-center reveal-element stagger-delay-3">
+                    <div class="w-16 h-16 bg-neural-teal/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">💼</span>
+                    </div>
+                    <h3 class="font-semibold text-white mb-2">LinkedIn</h3>
+                    <p class="text-slate-300 text-sm">Odyxy Platform</p>
+                </div>
+                
+                <div class="text-center reveal-element stagger-delay-4">
+                    <div class="w-16 h-16 bg-neural-teal/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <span class="text-2xl">🐙</span>
+                    </div>
+                    <h3 class="font-semibold text-white mb-2">GitHub</h3>
+                    <p class="text-slate-300 text-sm">Odyxy-Platform</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Community Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Join Our Community
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    Connect with other privacy advocates, early adopters, and the Odyxy team across our community channels.
+                </p>
+            </div>
+            
+            <div class="flex justify-center space-x-6 reveal-element stagger-delay-1">
+                <a href="#" class="social-link" title="Discord Community">
+                    <span class="text-xl">💬</span>
+                </a>
+                <a href="#" class="social-link" title="Telegram Group">
+                    <span class="text-xl">📱</span>
+                </a>
+                <a href="#" class="social-link" title="Reddit Community">
+                    <span class="text-xl">🤖</span>
+                </a>
+                <a href="#" class="social-link" title="Matrix Chat">
+                    <span class="text-xl">🌐</span>
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="font-display text-2xl font-semibold text-gradient mb-4">
+                    Odyxy
+                </div>
+                <p class="text-slate-400 mb-4">
+                    The Intelligent Platform for Private, Purposeful Connection
+                </p>
+                <p class="text-sm text-slate-500">
+                    © 2025 Odyxy. Built with privacy, designed for humanity.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Read backend endpoint from meta tag
+        function getBackendEndpoint() {
+            const meta = document.querySelector('meta[name="backend-endpoint"]');
+            return (meta && meta.content) ? meta.content : '/api/contact';
+        }
+
+        // Collect form data into an object (uses name, id, or placeholder as key)
+        function collectFormDataAsObject(form) {
+            const out = {};
+            const elements = Array.from(form.querySelectorAll('input, textarea, select'))
+                .filter(el => !el.disabled && el.type !== 'button' && el.type !== 'submit' && el.type !== 'reset');
+
+            elements.forEach(el => {
+                const key = el.name || el.id || el.dataset.field || el.placeholder || null;
+                if (!key) return;
+
+                if (el.type === 'checkbox') {
+                    out[key] = el.checked;
+                    return;
+                }
+
+                if (el.type === 'radio') {
+                    if (el.checked) out[key] = el.value;
+                    return;
+                }
+
+                if (el.tagName === 'SELECT') {
+                    // handle multi-select
+                    if (el.multiple) {
+                        out[key] = Array.from(el.selectedOptions).map(o => o.value);
+                    } else {
+                        out[key] = el.value;
+                    }
+                    return;
+                }
+
+                out[key] = el.value;
+            });
+
+            return out;
+        }
+
+        // Modal helpers
+        function closeModal() {
+            const m = document.querySelector('.__contact-modal-backdrop');
+            if (m) m.remove();
+        }
+
+        function showModal(title, message, isError = false) {
+            closeModal();
+            const backdrop = document.createElement('div');
+            backdrop.className = '__contact-modal-backdrop fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            backdrop.setAttribute('role', 'dialog');
+            backdrop.setAttribute('aria-modal', 'true');
+
+            const box = document.createElement('div');
+            box.className = 'bg-slate-900 rounded-2xl p-6 max-w-md mx-4 border';
+            box.style.borderColor = isError ? '#FB7185' : '#2DD4BF';
+
+            box.innerHTML = `
+                <div class="text-center">
+                    <div class="w-12 h-12 ${isError ? 'bg-rose-600' : 'bg-neural-teal'} rounded-full flex items-center justify-center mx-auto mb-4">
+                        ${isError ? '<svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v4m0 4h.01M21 12A9 9 0 1112 3a9 9 0 019 9z"/></svg>' : '<svg class="w-6 h-6 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg>'}
+                    </div>
+                    <h3 class="font-display text-xl font-bold text-white mb-2">${title}</h3>
+                    <p class="text-slate-300 mb-4" id="__contact-modal-message">${message}</p>
+                    <div class="flex justify-center">
+                        <button id="__contact-modal-close" class="cta-button">${isError ? 'Close' : 'Continue'}</button>
+                    </div>
+                </div>
+            `;
+
+            backdrop.appendChild(box);
+            document.body.appendChild(backdrop);
+
+            const btn = document.getElementById('__contact-modal-close');
+            if (btn) {
+                btn.focus();
+                btn.addEventListener('click', closeModal);
+            }
+
+            backdrop.addEventListener('click', (ev) => {
+                if (ev.target === backdrop) closeModal();
+            });
+        }
+
+        // Unified submission with fetch + AbortController and XHR fallback
+        async function sendJson(endpoint, payload, timeoutMs = 15000) {
+            const headers = {
+                'Content-Type': 'application/json',
+                'Accept': 'application/json',
+                'X-Requested-With': 'XMLHttpRequest'
+            };
+
+            // Fetch + AbortController path
+            if (window.fetch && window.AbortController) {
+                const controller = new AbortController();
+                const timer = setTimeout(() => controller.abort(), timeoutMs);
+                try {
+                    const res = await fetch(endpoint, {
+                        method: 'POST',
+                        headers,
+                        body: JSON.stringify(payload),
+                        mode: 'cors',
+                        credentials: 'same-origin',
+                        signal: controller.signal
+                    });
+                    clearTimeout(timer);
+                    const text = await res.text();
+                    let data = {};
+                    try { data = text ? JSON.parse(text) : {}; } catch (err) { data = { message: text || '' }; }
+                    return { ok: res.ok, status: res.status, data };
+                } catch (err) {
+                    clearTimeout(timer);
+                    throw err;
+                }
+            }
+
+            // XHR fallback
+            return await new Promise((resolve, reject) => {
+                const xhr = new XMLHttpRequest();
+                xhr.open('POST', endpoint, true);
+                Object.keys(headers).forEach(k => xhr.setRequestHeader(k, headers[k]));
+                xhr.timeout = timeoutMs;
+                xhr.onreadystatechange = function() {
+                    if (xhr.readyState !== 4) return;
+                    const text = xhr.responseText;
+                    let data = {};
+                    try { data = text ? JSON.parse(text) : {}; } catch (err) { data = { message: text || '' }; }
+                    resolve({ ok: xhr.status >= 200 && xhr.status < 300, status: xhr.status, data });
+                };
+                xhr.onerror = () => reject(new Error('Network error'));
+                xhr.ontimeout = () => reject(new Error('Timeout'));
+                try {
+                    xhr.send(JSON.stringify(payload));
+                } catch (err) {
+                    reject(err);
+                }
+            });
+        }
+
+        // Main submission handler
+        async function handleFormSubmission(e) {
+            e.preventDefault();
+            const form = e.target;
+            const submitBtn = form.querySelector('button[type="submit"], .cta-button');
+            const originalText = submitBtn ? submitBtn.textContent : null;
+            if (submitBtn) {
+                submitBtn.disabled = true;
+                submitBtn.textContent = 'Sending...';
+            }
+
+            const endpoint = getBackendEndpoint();
+            const formType = (form.id === 'beta-access-form') ? 'beta' : (form.id === 'partnership-inquiry-form') ? 'partnership' : 'general';
+            const payload = collectFormDataAsObject(form);
+            payload.formType = formType;
+            payload.submittedAt = new Date().toISOString();
+            payload.client = { ua: navigator.userAgent || '', locale: navigator.language || '' };
+
+            try {
+                const res = await sendJson(endpoint, payload, 15000);
+                if (!res.ok) {
+                    const msg = res.data && res.data.message ? res.data.message : `Server returned ${res.status}`;
+                    showModal('Error', `There was a problem sending your message: ${msg}`, true);
+                } else {
+                    const successMsg = (res.data && res.data.message) ? res.data.message : (formType === 'beta' ? 'Your beta application has been submitted.' : formType === 'partnership' ? 'Your partnership inquiry has been received.' : 'Your message has been sent successfully.');
+                    showModal('Thank you!', successMsg, false);
+                    form.reset();
+                }
+            } catch (err) {
+                console.error('Submission error:', err);
+                const timedOut = err && err.name === 'AbortError' || err.message === 'Timeout';
+                showModal('Network Error', timedOut ? 'Request timed out. Please try again.' : 'Unable to reach the server. Check your connection and try again.', true);
+            } finally {
+                if (submitBtn) {
+                    submitBtn.disabled = false;
+                    submitBtn.textContent = originalText;
+                }
+            }
+        }
+
+        // Initialize reveal animations and attach submission handlers
+        document.addEventListener('DOMContentLoaded', function() {
+            const revealElements = document.querySelectorAll('.reveal-element');
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) entry.target.classList.add('revealed');
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            revealElements.forEach(element => revealObserver.observe(element));
+
+            // Attach handlers only if forms exist
+            const beta = document.getElementById('beta-access-form');
+            const partnership = document.getElementById('partnership-inquiry-form');
+            const general = document.getElementById('general-contact-form');
+
+            if (beta) beta.addEventListener('submit', handleFormSubmission);
+            if (partnership) partnership.addEventListener('submit', handleFormSubmission);
+            if (general) general.addEventListener('submit', handleFormSubmission);
+        });
+
+        // Tab switch & scroll helpers (kept compatible)
+        function switchTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+            document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+            const contentEl = document.getElementById(tabName + '-form');
+            const tabBtn = document.getElementById(tabName + '-tab');
+            if (contentEl) contentEl.classList.add('active');
+            if (tabBtn) tabBtn.classList.add('active');
+        }
+
+        function scrollToForms() {
+            const formsSection = document.querySelector('#beta-form')?.parentElement;
+            if (!formsSection) return;
+            formsSection.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            setTimeout(() => { window.scrollBy(0, -80); }, 300);
+        }
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>

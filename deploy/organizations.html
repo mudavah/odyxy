@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Organizations - Odyxy</title>
+    <link rel="icon" href="resources/odyxy_logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-space-navy: #0B1426;
+            --neural-teal: #2DD4BF;
+            --organic-green: #9710b9;
+            --warm-amber: #F59E0B;
+            --subtle-purple: #8B5CF6;
+            --pure-white: #FFFFFF;
+            --soft-gray: #F8FAFC;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--deep-space-navy);
+            color: var(--pure-white);
+            overflow-x: hidden;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--neural-teal);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neural-teal);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .benefit-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .benefit-card:hover {
+            border-color: var(--neural-teal);
+            box-shadow: 0 12px 40px rgba(45, 212, 191, 0.2);
+            transform: translateY(-4px);
+        }
+        
+        .benefit-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 24px;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(45, 212, 191, 0.3);
+        }
+        
+        .form-input {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--neural-teal);
+            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: #94A3B8;
+        }
+        
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal-element.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stagger-delay-1 { transition-delay: 0.1s; }
+        .stagger-delay-2 { transition-delay: 0.2s; }
+        .stagger-delay-3 { transition-delay: 0.3s; }
+        .stagger-delay-4 { transition-delay: 0.4s; }
+        
+        .arena-simulator {
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 16px;
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            overflow: hidden;
+        }
+        
+        .message-bubble {
+            background: rgba(45, 212, 191, 0.1);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 12px;
+            padding: 12px 16px;
+            margin: 8px 0;
+            animation: messageAppear 0.5s ease-out;
+        }
+        
+        @keyframes messageAppear {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        
+        .user-avatar {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        
+        .logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .logo-brand img {
+            height: 40px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-brand:hover img {
+            transform: scale(1.05);
+        }
+        
+        .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        /* Mobile menu styles (same as index) */
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: flex-end;
+            z-index: 60;
+            pointer-events: none;
+        }
+
+        .mobile-menu .menu-panel {
+            width: 300px;
+            max-width: 85%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(6px);
+            box-shadow: -12px 0 40px rgba(2,6,23,0.6);
+            transform: translateX(100%);
+            transition: transform 280ms ease, opacity 240ms ease;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 20px;
+            pointer-events: auto;
+        }
+
+        .mobile-menu.open .menu-panel {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(2,6,23,0.6);
+            opacity: 0;
+            transition: opacity 240ms ease;
+            pointer-events: none;
+        }
+
+        .mobile-menu.open .mobile-menu-backdrop {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .mobile-menu a {
+            color: var(--pure-white);
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 10px 6px;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .mobile-menu a:focus,
+        .mobile-menu a:hover {
+            background: rgba(45,212,191,0.06);
+            color: var(--neural-teal);
+            outline: none;
+        }
+
+        .mobile-menu .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--pure-white);
+            align-self: flex-end;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        body.mobile-menu-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="logo-brand">
+                    <img src="resources/odyxy_logo.png" alt="Odyxy Logo">
+                    <span class="brand-name">Odyxy</span>
+                </a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium">Home</a>
+                    <a href="index.html" class="nav-link text-sm font-medium">Features</a>
+                    <a href="organizations.html" class="nav-link text-sm font-medium text-neural-teal">For Organizations</a>
+                    <a href="advertisers.html" class="nav-link text-sm font-medium">For Advertisers</a>
+                    <a href="privacy.html" class="nav-link text-sm font-medium">Privacy & Trust</a>
+                    <a href="contact.html" class="nav-link text-sm font-medium">Contact</a>
+                </div>
+                <button class="md:hidden text-white" id="mobile-menu-btn">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-6">
+                    From Public Awareness to 
+                    <span class="text-gradient">Global Participation</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
+                    Connect with engaged communities, share your mission, and collaborate without algorithmic barriers. 
+                    Odyxy bridges the gap between organizations and the people who care about your work.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal-element stagger-delay-1">
+                    <img src="resources/global-collaboration.png" alt="Global Collaboration" class="w-full rounded-2xl shadow-2xl">
+                </div>
+                
+                <div class="reveal-element stagger-delay-2">
+                    <h2 class="font-display text-3xl font-semibold mb-6">
+                        Built for Mission-Driven Organizations
+                    </h2>
+                    <p class="text-lg text-slate-300 mb-8 leading-relaxed">
+                        Whether you're NASA exploring the cosmos, an NGO fighting climate change, or a research institution 
+                        pushing the boundaries of human knowledge, Odyxy provides the tools to engage authentically with global audiences.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Verified institutional presence</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Direct community engagement</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Real-time insights and analytics</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Privacy-first architecture</span>
+                        </div>
+                    </div>
+                    
+                    <button class="cta-button" onclick="scrollToSection('partnership-form')">
+                        Start Partnership Discussion
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Why Organizations Choose Odyxy
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    Experience the benefits of authentic engagement without compromising on privacy or mission integrity.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="benefit-card reveal-element stagger-delay-1">
+                    <div class="benefit-icon">🎯</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Direct Reach</h3>
+                    <p class="text-slate-300 mb-6">
+                        Connect directly with interested participants without algorithmic barriers. Your content reaches everyone who wants to engage with your mission.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">100% Organic Reach</div>
+                </div>
+                
+                <div class="benefit-card reveal-element stagger-delay-2">
+                    <div class="benefit-icon">🔒</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Trust & Credibility</h3>
+                    <p class="text-slate-300 mb-6">
+                        Privacy-first architecture builds public trust and institutional credibility. Show your commitment to ethical digital engagement.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Enhanced Reputation</div>
+                </div>
+                
+                <div class="benefit-card reveal-element stagger-delay-3">
+                    <div class="benefit-icon">📊</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Real-Time Insights</h3>
+                    <p class="text-slate-300 mb-6">
+                        Get automatic summaries and topic clustering to understand community interests and engagement patterns without invasive tracking.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Intelligent Analytics</div>
+                </div>
+                
+                <div class="benefit-card reveal-element stagger-delay-4">
+                    <div class="benefit-icon">🌍</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Global Collaboration</h3>
+                    <p class="text-slate-300 mb-6">
+                        Engage with international communities, researchers, and enthusiasts. Break down geographical barriers for meaningful collaboration.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Worldwide Access</div>
+                </div>
+                
+                <div class="benefit-card reveal-element stagger-delay-5">
+                    <div class="benefit-icon">🛡️</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Mission Integrity</h3>
+                    <p class="text-slate-300 mb-6">
+                        Maintain complete control over your institutional presence. No ads, no algorithms, no compromise of your organizational values.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Uncompromised Values</div>
+                </div>
+                
+                <div class="benefit-card reveal-element stagger-delay-4">
+                    <div class="benefit-icon">⚡</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Instant Deployment</h3>
+                    <p class="text-slate-300 mb-6">
+                        Launch verified missions, outreach programs, and educational challenges quickly and efficiently with our intuitive platform.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Rapid Setup</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Arena Simulator -->
+    <section class="py-20 bg-slate-800/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    See Global Collaboration in Action
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    Experience how organizations can create engaging arenas for meaningful discussions and collaborative projects.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-3 gap-8">
+                <div class="lg:col-span-2 reveal-element stagger-delay-1">
+                    <div class="arena-simulator p-6">
+                        <div class="flex justify-between items-center mb-6">
+                            <h3 class="font-display text-xl font-semibold">NASA Mars Exploration Arena</h3>
+                            <div class="flex space-x-2">
+                                <button class="px-3 py-1 bg-neural-teal/20 text-neural-teal rounded-full text-sm" onclick="changeArena('nasa', this)">NASA</button>
+                                <button class="px-3 py-1 bg-slate-600 text-slate-300 rounded-full text-sm" onclick="changeArena('climate', this)">Climate</button>
+                                <button class="px-3 py-1 bg-slate-600 text-slate-300 rounded-full text-sm" onclick="changeArena('research', this)">Research</button>
+                            </div>
+                        </div>
+                        
+                        <div id="arena-messages" class="space-y-3 h-80 overflow-y-auto">
+                            <!-- Messages will be populated by JavaScript -->
+                        </div>
+                        
+                        <div class="mt-6 flex items-center justify-between text-sm text-slate-400">
+                            <span>247 participants online</span>
+                            <span>Active discussions: Climate Data • Mission Planning • Tech Innovation</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="reveal-element stagger-delay-2">
+                    <div class="benefit-card">
+                        <h3 class="font-display text-xl font-semibold mb-4">Live Engagement</h3>
+                        <p class="text-slate-300 mb-6">
+                            Watch real-time collaboration across different time zones and expertise levels. 
+                            See how semantic intelligence organizes discussions naturally.
+                        </p>
+                        
+                        <div class="space-y-3">
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-slate-400">Messages today</span>
+                                <span class="text-neural-teal font-semibold">1,247</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-slate-400">Active topics</span>
+                                <span class="text-neural-teal font-semibold">23</span>
+                            </div>
+                            <div class="flex items-center justify-between">
+                                <span class="text-sm text-slate-400">Countries represented</span>
+                                <span class="text-neural-teal font-semibold">47</span>
+                            </div>
+                        </div>
+                        
+                        <button class="cta-button w-full mt-6" onclick="simulateArena()">
+                            Simulate Activity
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Partnership Form -->
+    <section id="partnership-form" class="py-20">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Start Your Partnership Journey
+                </h2>
+                <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+                    Ready to engage with global communities? Let's discuss how Odyxy can amplify your organization's mission.
+                </p>
+            </div>
+            
+            <div class="bg-slate-800/50 rounded-2xl p-8 reveal-element stagger-delay-1">
+                <form id="partnership-form-element" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Organization Name</label>
+                            <input type="text" class="form-input" placeholder="Enter your organization name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Organization Type</label>
+                            <select class="form-input" required>
+                                <option value="">Select type</option>
+                                <option value="nasa">Space Agency (NASA, ESA, etc.)</option>
+                                <option value="ngo">Non-Governmental Organization</option>
+                                <option value="research">Research Institution</option>
+                                <option value="university">University/Academic</option>
+                                <option value="government">Government Agency</option>
+                                <option value="nonprofit">Non-Profit Organization</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Contact Person</label>
+                            <input type="text" class="form-input" placeholder="Full name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Position/Title</label>
+                            <input type="text" class="form-input" placeholder="Your role in the organization" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+                            <input type="email" class="form-input" placeholder="contact@organization.org" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
+                            <input type="tel" class="form-input" placeholder="+1 (555) 123-4567">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Organization Website</label>
+                        <input type="url" class="form-input" placeholder="https://www.yourorganization.org">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Mission Focus Area</label>
+                        <select class="form-input" required>
+                            <option value="">Select primary focus</option>
+                            <option value="space">Space Exploration & Astronomy</option>
+                            <option value="climate">Climate Change & Environment</option>
+                            <option value="health">Global Health & Medicine</option>
+                            <option value="education">Education & Research</option>
+                            <option value="technology">Technology & Innovation</option>
+                            <option value="humanitarian">Humanitarian Aid</option>
+                            <option value="conservation">Wildlife & Conservation</option>
+                            <option value="other">Other</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Partnership Goals</label>
+                        <textarea class="form-input h-32 resize-none" placeholder="Describe what you hope to achieve through partnership with Odyxy. What kind of engagement are you looking for?" required></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Expected Audience Size</label>
+                        <select class="form-input" required>
+                            <option value="">Select expected reach</option>
+                            <option value="small">Less than 1,000 participants</option>
+                            <option value="medium">1,000 - 10,000 participants</option>
+                            <option value="large">10,000 - 100,000 participants</option>
+                            <option value="massive">More than 100,000 participants</option>
+                        </select>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Timeline</label>
+                        <select class="form-input" required>
+                            <option value="">Select timeline</option>
+                            <option value="immediate">Ready to start immediately</option>
+                            <option value="month">Within the next month</option>
+                            <option value="quarter">Within the next quarter</option>
+                            <option value="year">Within the next year</option>
+                            <option value="exploring">Just exploring options</option>
+                        </select>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <input type="checkbox" id="privacy-agreement" class="mt-1" required>
+                        <label for="privacy-agreement" class="text-sm text-slate-300">
+                            I understand that Odyxy operates on a privacy-first principle and agree to respect user privacy in all partnership activities.
+                        </label>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="cta-button">
+                            Submit Partnership Inquiry
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="font-display text-2xl font-semibold text-gradient mb-4">
+                    Odyxy
+                </div>
+                <p class="text-slate-400 mb-4">
+                    The Intelligent Platform for Private, Purposeful Connection
+                </p>
+                <p class="text-sm text-slate-500">
+                    © 2025 Odyxy. Built with privacy, designed for humanity.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize reveal animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const revealElements = document.querySelectorAll('.reveal-element');
+            
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            revealElements.forEach(element => {
+                revealObserver.observe(element);
+            });
+            
+            // Initialize arena simulator
+            initializeArenaSimulator();
+            
+            // Handle form submission
+            document.getElementById('partnership-form-element').addEventListener('submit', handleFormSubmission);
+        });
+        
+        // Arena simulator data
+        const arenaData = {
+            nasa: [
+                { user: 'Dr. Sarah Chen', location: 'NASA JPL', message: 'The latest Mars rover data shows fascinating geological formations in the Jezero crater.', time: '2 min ago', topic: 'Mars Exploration' },
+                { user: 'Prof. Ahmed Hassan', location: 'Cairo University', message: 'Our team\'s analysis suggests these could be ancient lake sediments. This is groundbreaking!', time: '1 min ago', topic: 'Mars Exploration' },
+                { user: 'Maria Rodriguez', location: 'Independent Researcher', message: 'Has anyone considered the implications for past microbial life?', time: '30 sec ago', topic: 'Astrobiology' },
+                { user: 'Dr. James Wilson', location: 'MIT', message: 'The mineral composition data is crucial. We need to compare with Earth analogues.', time: '15 sec ago', topic: 'Geology' },
+                { user: 'Yuki Tanaka', location: 'JAXA', message: 'Our satellite observations support these findings. Excellent work everyone!', time: '5 sec ago', topic: 'Satellite Data' }
+            ],
+            climate: [
+                { user: 'Dr. Emily Foster', location: 'NOAA', message: 'Global temperature anomalies this month are concerning. We need to discuss mitigation strategies.', time: '3 min ago', topic: 'Climate Data' },
+                { user: 'Carlos Mendez', location: 'UN Climate Program', message: 'Our models show similar trends. Policy makers need this data immediately.', time: '2 min ago', topic: 'Policy Impact' },
+                { user: 'Dr. Priya Sharma', location: 'Indian Meteorological Dept', message: 'The monsoon patterns are shifting dramatically. This affects billions of people.', time: '1 min ago', topic: 'Weather Patterns' },
+                { user: 'Prof. Lisa Anderson', location: 'University of Melbourne', message: 'Ocean acidification rates are accelerating. Marine ecosystems are at risk.', time: '45 sec ago', topic: 'Ocean Health' },
+                { user: 'Dr. Michael O\'Brien', location: 'Environmental Protection Agency', message: 'We\'re implementing new monitoring protocols based on this research.', time: '20 sec ago', topic: 'Monitoring' }
+            ],
+            research: [
+                { user: 'Dr. Rachel Kim', location: 'Stanford Research', message: 'Our AI model for protein folding is showing remarkable accuracy improvements.', time: '4 min ago', topic: 'AI Research' },
+                { user: 'Prof. David Liu', location: 'Cambridge University', message: 'This could revolutionize drug discovery. Have you tested with larger datasets?', time: '3 min ago', topic: 'Drug Discovery' },
+                { user: 'Sarah Johnson', location: 'PhD Student, MIT', message: 'I\'m working on similar research. Would love to collaborate on validation studies.', time: '2 min ago', topic: 'Collaboration' },
+                { user: 'Dr. Roberto Silva', location: 'São Paulo University', message: 'The implications for rare disease treatment are enormous. Great work!', time: '1 min ago', topic: 'Medical Applications' },
+                { user: 'Dr. Anna Petrov', location: 'Moscow State University', message: 'Our lab has complementary expertise. Let\'s discuss a research partnership.', time: '30 sec ago', topic: 'Partnership' }
+            ]
+        };
+        
+        let currentArena = 'nasa';
+        let messageIndex = 0;
+        
+        function initializeArenaSimulator() {
+            displayArenaMessages();
+        }
+        
+        function changeArena(arenaType, el) {
+            currentArena = arenaType;
+            messageIndex = 0;
+
+            // Update button states
+            document.querySelectorAll('[onclick*="changeArena"]').forEach(btn => {
+                btn.className = 'px-3 py-1 bg-slate-600 text-slate-300 rounded-full text-sm';
+            });
+            if (el) el.className = 'px-3 py-1 bg-neural-teal/20 text-neural-teal rounded-full text-sm';
+
+            displayArenaMessages();
+        }
+        
+        function displayArenaMessages() {
+            const container = document.getElementById('arena-messages');
+            container.innerHTML = '';
+            
+            const messages = arenaData[currentArena];
+            
+            messages.forEach((msg, index) => {
+                setTimeout(() => {
+                    const messageElement = document.createElement('div');
+                    messageElement.className = 'message-bubble';
+                    messageElement.innerHTML = `
+                        <div class="flex items-start space-x-3">
+                            <div class="user-avatar">${msg.user.charAt(0)}</div>
+                            <div class="flex-1">
+                                <div class="flex items-center space-x-2 mb-1">
+                                    <span class="font-semibold text-white">${msg.user}</span>
+                                    <span class="text-xs text-slate-400">${msg.location}</span>
+                                    <span class="text-xs text-neural-teal">${msg.topic}</span>
+                                </div>
+                                <p class="text-slate-300 text-sm">${msg.message}</p>
+                                <div class="text-xs text-slate-500 mt-1">${msg.time}</div>
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(messageElement);
+                    container.scrollTop = container.scrollHeight;
+                }, index * 1000);
+            });
+        }
+        
+        function simulateArena() {
+            messageIndex = 0;
+            displayArenaMessages();
+        }
+        
+        function handleFormSubmission(e) {
+            e.preventDefault();
+            
+            // Show success message
+            const form = e.target;
+            const formData = new FormData(form);
+            
+            // Create success modal
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-slate-900 rounded-2xl p-8 max-w-md mx-4 border border-neural-teal">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-organic-green rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-4">Thank You!</h3>
+                        <p class="text-slate-300 mb-6">
+                            Your partnership inquiry has been received. We'll review your information and get back to you within 48 hours.
+                        </p>
+                        <button onclick="closeModal()" class="cta-button">
+                            Continue Exploring
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Reset form
+            form.reset();
+        }
+        
+        function closeModal() {
+            const modal = document.querySelector('.fixed.inset-0');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>

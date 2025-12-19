@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Odyxy - The Intelligent Platform for Private, Purposeful Connection</title>
+    <link rel="icon" href="resources/odyxy_logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/p5.js/1.7.0/p5.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/js/splide.min.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/@splidejs/splide@4.1.4/dist/css/splide.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-space-navy: #0B1426;
+            --neural-teal: #2DD4BF;
+            --organic-green: #9710b9;
+            --warm-amber: #F59E0B;
+            --subtle-purple: #8B5CF6;
+            --pure-white: #FFFFFF;
+            --soft-gray: #F8FAFC;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--deep-space-navy);
+            color: var(--pure-white);
+            overflow-x: hidden;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .neural-gradient {
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+        }
+        
+        .intelligence-aura {
+            background: radial-gradient(circle, var(--pure-white), var(--soft-gray));
+        }
+        
+        .hero-bg {
+            background: linear-gradient(135deg, #0B1426 0%, #1E293B 50%, #0F172A 100%);
+        }
+        
+        .glow-effect {
+            box-shadow: 0 0 20px rgba(45, 212, 191, 0.3);
+        }
+        
+        .card-hover {
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .card-hover:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 20px 40px rgba(45, 212, 191, 0.2);
+        }
+        
+        .neural-node {
+            width: 8px;
+            height: 8px;
+            background: var(--neural-teal);
+            border-radius: 50%;
+            position: absolute;
+            animation: pulse 2s infinite;
+        }
+        
+        @keyframes pulse {
+            0%, 100% { opacity: 0.6; transform: scale(1); }
+            50% { opacity: 1; transform: scale(1.2); }
+        }
+        
+        .floating-particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--organic-green);
+            border-radius: 50%;
+            animation: float 6s infinite linear;
+        }
+        
+        @keyframes float {
+            0% { transform: translateY(100vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) rotate(360deg); opacity: 0; }
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--neural-teal);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neural-teal);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .feature-icon {
+            width: 64px;
+            height: 64px;
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            margin-bottom: 16px;
+        }
+        
+        .audience-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            border-radius: 16px;
+            padding: 24px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .audience-card:hover {
+            border-color: var(--neural-teal);
+            box-shadow: 0 8px 32px rgba(45, 212, 191, 0.2);
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            border: none;
+            border-radius: 12px;
+            padding: 12px 24px;
+            color: white;
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(45, 212, 191, 0.3);
+        }
+        
+        .secondary-button {
+            background: transparent;
+            border: 2px solid var(--neural-teal);
+            border-radius: 12px;
+            padding: 10px 22px;
+            color: var(--neural-teal);
+            font-weight: 500;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        
+        .secondary-button:hover {
+            background: var(--neural-teal);
+            color: white;
+        }
+        
+        #p5-canvas {
+            position: fixed;
+            top: 0;
+            left: 0;
+            z-index: -1;
+        }
+        
+        .content-section {
+            position: relative;
+            z-index: 1;
+        }
+        
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal-element.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stagger-delay-1 { transition-delay: 0.1s; }
+        .stagger-delay-2 { transition-delay: 0.2s; }
+        .stagger-delay-3 { transition-delay: 0.3s; }
+        .stagger-delay-4 { transition-delay: 0.4s; }
+        .stagger-delay-5 { transition-delay: 0.5s; }
+        
+        .logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .logo-brand img {
+            height: 40px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-brand:hover img {
+            transform: scale(1.05);
+        }
+        
+        .brand-name {
+            font-display: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        /* Mobile menu styles */
+        .mobile-menu {
+            position: fixed;
+            inset: 0;
+            display: flex;
+            justify-content: flex-end;
+            z-index: 60;
+            pointer-events: none;
+        }
+
+        .mobile-menu .menu-panel {
+            width: 300px;
+            max-width: 85%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.98);
+            backdrop-filter: blur(6px);
+            box-shadow: -12px 0 40px rgba(2,6,23,0.6);
+            transform: translateX(100%);
+            transition: transform 280ms ease, opacity 240ms ease;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            padding: 20px;
+            pointer-events: auto;
+        }
+
+        .mobile-menu.open .menu-panel {
+            transform: translateX(0);
+        }
+
+        .mobile-menu-backdrop {
+            position: absolute;
+            inset: 0;
+            background: rgba(2,6,23,0.6);
+            opacity: 0;
+            transition: opacity 240ms ease;
+            pointer-events: none;
+        }
+
+        .mobile-menu.open .mobile-menu-backdrop {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .mobile-menu a {
+            color: var(--pure-white);
+            text-decoration: none;
+            font-size: 1rem;
+            padding: 10px 6px;
+            border-radius: 8px;
+            display: block;
+        }
+
+        .mobile-menu a:focus,
+        .mobile-menu a:hover {
+            background: rgba(45,212,191,0.06);
+            color: var(--neural-teal);
+            outline: none;
+        }
+
+        .mobile-menu .close-btn {
+            background: transparent;
+            border: none;
+            color: var(--pure-white);
+            align-self: flex-end;
+            padding: 8px;
+            cursor: pointer;
+        }
+
+        body.mobile-menu-open {
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="#home" class="logo-brand">
+                    <img src="resources/odyxy_logo.png" alt="Odyxy Logo">
+                    <span class="brand-name">Odyxy</span>
+                </a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="nav-link text-sm font-medium">Home</a>
+                    <!-- <a href="features.html" class="nav-link text-sm font-medium">Features</a> -->
+                    <a href="organizations.html" class="nav-link text-sm font-medium">For Organizations</a>
+                    <a href="advertisers.html" class="nav-link text-sm font-medium">For Advertisers</a>
+                    <a href="privacy.html" class="nav-link text-sm font-medium">Privacy & Trust</a>
+                    <a href="contact.html" class="nav-link text-sm font-medium">Contact</a>
+                </div>
+                <button class="md:hidden text-white" id="mobile-menu-btn">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="min-h-screen flex items-center justify-center hero-bg relative mt-24">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal-element">
+                <h1 class="font-display text-5xl md:text-7xl font-bold mb-6">
+                    Odyxy
+                </h1>
+
+                <h2 class="font-display text-2xl md:text-4xl font-medium mb-8 text-gradient">
+                    The Intelligent Platform for Private, Purposeful Connection
+                </h2>
+                <p class="text-xl md:text-2xl text-slate-300 mb-12 max-w-4xl mx-auto leading-relaxed">
+                    Where messaging meets collaboration, and privacy meets progress. 
+                    Experience the future of digital interaction with on-device intelligence and zero data collection.
+                </p>
+            </div>
+                
+            
+            <div class="reveal-element stagger-delay-1">
+                <div class="flex flex-col sm:flex-row gap-6 justify-center mb-16">
+                    <button class="cta-button text-lg px-8 py-4" onclick="scrollToSection('features')">
+                        Explore Features
+                    </button>
+                    <button class="secondary-button text-lg px-8 py-4" onclick="window.location.href='organizations.html'">
+                        Partner with Us
+                    </button>
+                </div>
+            </div>
+            
+            <!-- Audience Segments -->
+            <div class="reveal-element stagger-delay-2">
+                <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                    <div class="audience-card" data-audience="organizations">
+                        <div class="feature-icon">🏛️</div>
+                        <h3 class="font-display text-xl font-semibold mb-4">For Organizations</h3>
+                        <p class="text-slate-300 mb-6">
+                            From public awareness to global participation. Host verified missions and reach engaged communities without algorithmic barriers.
+                        </p>
+                        <button class="cta-button" onclick="window.location.href='organizations.html'">
+                            Learn More
+                        </button>
+                    </div>
+                    
+                    <div class="audience-card" data-audience="users">
+                        <div class="feature-icon">👥</div>
+                        <h3 class="font-display text-xl font-semibold mb-4">For Users</h3>
+                        <p class="text-slate-300 mb-6">
+                            Private, intelligent, and purposeful digital interaction. Your data stays on your device while you connect with the world.
+                        </p>
+                        <button class="cta-button" onclick="showComingSoon()">
+                            Join the Odyssey
+                        </button>
+                    </div>
+                    
+                    <div class="audience-card" data-audience="advertisers">
+                        <div class="feature-icon">📢</div>
+                        <h3 class="font-display text-xl font-semibold mb-4">For Advertisers</h3>
+                        <p class="text-slate-300 mb-6">
+                            Reach real audiences through context, not tracking. Ethical advertising that builds trust and drives meaningful engagement.
+                        </p>
+                        <button class="cta-button" onclick="window.location.href='advertisers.html'">
+                            Brand Partnership
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20 content-section">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Intelligent Features
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    Experience the next generation of digital communication with features designed for privacy, intelligence, and meaningful connection.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="feature-card reveal-element stagger-delay-1">
+                    <div class="feature-icon">🧠</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">On-Device Semantic Intelligence</h3>
+                    <p class="text-slate-300 mb-6">
+                        Advanced AI that learns and adapts entirely on your device. No cloud processing, no data sharing, complete privacy.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">100% Local Processing</div>
+                </div>
+                
+                <div class="feature-card reveal-element stagger-delay-2">
+                    <div class="feature-icon">💬</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Chart - Intelligent Messenger</h3>
+                    <p class="text-slate-300 mb-6">
+                        Unified messaging hub that organizes conversations intelligently. Automatic summarization, urgency sorting, and smart categorization.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Multi-Platform Integration</div>
+                </div>
+                
+                <div class="feature-card reveal-element stagger-delay-3">
+                    <div class="feature-icon">🌐</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Arena & Co-Work</h3>
+                    <p class="text-slate-300 mb-6">
+                        Collaborative workspaces for meaningful discussions. Create topic-based arenas and work together without algorithmic interference.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Global Collaboration</div>
+                </div>
+                
+                <div class="feature-card reveal-element stagger-delay-4">
+                    <div class="feature-icon">📡</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Digest & Showroom</h3>
+                    <p class="text-slate-300 mb-6">
+                        Verified knowledge hub with ethical discovery. Get trustworthy information and relevant opportunities without surveillance.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Curated Discovery</div>
+                </div>
+                
+                <div class="feature-card reveal-element stagger-delay-5">
+                    <div class="feature-icon">🤖</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">AI Manager</h3>
+                    <p class="text-slate-300 mb-6">
+                        Personal assistant that organizes your digital life. Live summaries, topic highlighting, and intelligent notifications.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Smart Organization</div>
+                </div>
+                
+                <div class="feature-card reveal-element stagger-delay-4">
+                    <div class="feature-icon">🔒</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Zero-Data Architecture</h3>
+                    <p class="text-slate-300 mb-6">
+                        Military-grade encryption with no data collection. Your conversations, preferences, and insights stay exclusively on your device.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Complete Privacy</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo Section -->
+    <section id="demo" class="py-20 content-section bg-slate-800/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Experience the Difference
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    See how Odyxy's on-device intelligence transforms your digital experience while protecting your privacy.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal-element">
+                    <div id="privacy-comparison" class="h-96 bg-slate-900 rounded-2xl p-6"></div>
+                </div>
+                
+                <div class="reveal-element stagger-delay-1">
+                    <h3 class="font-display text-2xl font-semibold mb-6">Privacy-First Design</h3>
+                    <p class="text-slate-300 mb-8 text-lg leading-relaxed">
+                        Unlike traditional platforms that harvest your data, Odyxy processes everything on your device. 
+                        Your conversations, preferences, and insights never leave your control.
+                    </p>
+                    
+                    <div class="space-y-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">No data collection or tracking</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">On-device AI processing</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">End-to-end encryption</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Offline functionality</span>
+                        </div>
+                    </div>
+                    
+                    <button class="cta-button mt-8" onclick="window.location.href='privacy.html'">
+                        Learn More About Privacy
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Call to Action Section -->
+    <section class="py-20 content-section">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+            <div class="reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Ready to Join the Odyssey?
+                </h2>
+                <p class="text-xl text-slate-300 mb-12 max-w-2xl mx-auto">
+                    Be part of the future of digital communication. Experience privacy, intelligence, and purposeful connection like never before.
+                </p>
+                
+                <div class="flex flex-col sm:flex-row gap-6 justify-center">
+                    <button class="cta-button text-lg px-8 py-4" onclick="showComingSoon()">
+                        Get Early Access
+                    </button>
+                    <button class="secondary-button text-lg px-8 py-4" onclick="window.location.href='contact.html'">
+                        Contact Us
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="font-display text-2xl font-semibold text-gradient mb-4">
+                    Odyxy
+                </div>
+                <p class="text-slate-400 mb-4">
+                    The Intelligent Platform for Private, Purposeful Connection
+                </p>
+                <p class="text-sm text-slate-500">
+                    © 2025 Odyxy. Built with privacy, designed for humanity.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="main.js"></script>
+</body>
+</html>

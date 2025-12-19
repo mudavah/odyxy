@@ -1,0 +1,794 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>For Advertisers - Odyxy</title>
+    <link rel="icon" href="resources/odyxy_logo.png" type="image/png">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/animejs/3.2.1/anime.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/echarts@5.4.3/dist/echarts.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --deep-space-navy: #0B1426;
+            --neural-teal: #2DD4BF;
+            --organic-green: #9710b9;
+            --warm-amber: #F59E0B;
+            --subtle-purple: #8B5CF6;
+            --pure-white: #FFFFFF;
+            --soft-gray: #F8FAFC;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--deep-space-navy);
+            color: var(--pure-white);
+            overflow-x: hidden;
+        }
+        
+        .font-display {
+            font-family: 'Space Grotesk', sans-serif;
+        }
+        
+        .text-gradient {
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .nav-link {
+            position: relative;
+            transition: all 0.3s ease;
+        }
+        
+        .nav-link:hover {
+            color: var(--neural-teal);
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -4px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: var(--neural-teal);
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .benefit-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            border-radius: 16px;
+            padding: 32px;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+        }
+        
+        .benefit-card:hover {
+            border-color: var(--neural-teal);
+            box-shadow: 0 12px 40px rgba(45, 212, 191, 0.2);
+            transform: translateY(-4px);
+        }
+        
+        .benefit-icon {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 32px;
+            margin-bottom: 24px;
+        }
+        
+        .cta-button {
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            border: none;
+            border-radius: 12px;
+            padding: 16px 32px;
+            color: white;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        
+        .cta-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 24px rgba(45, 212, 191, 0.3);
+        }
+        
+        .comparison-container {
+            background: rgba(15, 23, 42, 0.9);
+            border-radius: 16px;
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            overflow: hidden;
+        }
+        
+        .comparison-side {
+            padding: 24px;
+            min-height: 400px;
+            position: relative;
+        }
+        
+        .traditional-side {
+            background: linear-gradient(135deg, rgba(239, 68, 68, 0.1), rgba(185, 28, 28, 0.1));
+            border-right: 1px solid rgba(239, 68, 68, 0.3);
+        }
+        
+        .odyxy-side {
+            background: linear-gradient(135deg, rgba(45, 212, 191, 0.1), rgba(16, 185, 129, 0.1));
+        }
+        
+        .ad-demo {
+            background: white;
+            border-radius: 8px;
+            padding: 16px;
+            margin: 12px 0;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        .traditional-ad {
+            border: 2px solid #EF4444;
+            position: relative;
+        }
+        
+        .traditional-ad::before {
+            content: 'TRACKING';
+            position: absolute;
+            top: -8px;
+            right: 8px;
+            background: #EF4444;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .odyxy-ad {
+            border: 2px solid #10B981;
+            position: relative;
+        }
+        
+        .odyxy-ad::before {
+            content: 'CONTEXTUAL';
+            position: absolute;
+            top: -8px;
+            right: 8px;
+            background: #10B981;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 10px;
+            font-weight: bold;
+        }
+        
+        .reveal-element {
+            opacity: 0;
+            transform: translateY(30px);
+            transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        .reveal-element.revealed {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .stagger-delay-1 { transition-delay: 0.1s; }
+        .stagger-delay-2 { transition-delay: 0.2s; }
+        .stagger-delay-3 { transition-delay: 0.3s; }
+        .stagger-delay-4 { transition-delay: 0.4s; }
+        
+        .metric-card {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .metric-number {
+            font-size: 2.5rem;
+            font-weight: bold;
+            color: var(--neural-teal);
+            margin-bottom: 8px;
+        }
+        
+        .form-input {
+            background: rgba(15, 23, 42, 0.8);
+            border: 1px solid rgba(45, 212, 191, 0.3);
+            border-radius: 12px;
+            padding: 16px;
+            color: white;
+            width: 100%;
+            transition: all 0.3s ease;
+        }
+        
+        .form-input:focus {
+            outline: none;
+            border-color: var(--neural-teal);
+            box-shadow: 0 0 0 3px rgba(45, 212, 191, 0.1);
+        }
+        
+        .form-input::placeholder {
+            color: #94A3B8;
+        }
+        
+        .logo-brand {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            text-decoration: none;
+            color: inherit;
+        }
+        
+        .logo-brand img {
+            height: 40px;
+            width: auto;
+            transition: transform 0.3s ease;
+        }
+        
+        .logo-brand:hover img {
+            transform: scale(1.05);
+        }
+        
+        .brand-name {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 600;
+            background: linear-gradient(135deg, var(--neural-teal), var(--organic-green));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        /* Mobile menu styles */
+        .mobile-menu { position: fixed; inset: 0; display: flex; justify-content: flex-end; z-index: 60; pointer-events: none; }
+        .mobile-menu .menu-panel { width: 300px; max-width: 85%; height: 100%; background: rgba(15, 23, 42, 0.98); backdrop-filter: blur(6px); box-shadow: -12px 0 40px rgba(2,6,23,0.6); transform: translateX(100%); transition: transform 280ms ease, opacity 240ms ease; display: flex; flex-direction: column; gap: 12px; padding: 20px; pointer-events: auto; }
+        .mobile-menu.open .menu-panel { transform: translateX(0); }
+        .mobile-menu-backdrop { position: absolute; inset: 0; background: rgba(2,6,23,0.6); opacity: 0; transition: opacity 240ms ease; pointer-events: none; }
+        .mobile-menu.open .mobile-menu-backdrop { opacity: 1; pointer-events: auto; }
+        .mobile-menu a { color: var(--pure-white); text-decoration: none; font-size: 1rem; padding: 10px 6px; border-radius: 8px; display: block; }
+        .mobile-menu a:focus, .mobile-menu a:hover { background: rgba(45,212,191,0.06); color: var(--neural-teal); outline: none; }
+        .mobile-menu .close-btn { background: transparent; border: none; color: var(--pure-white); align-self: flex-end; padding: 8px; cursor: pointer; }
+        body.mobile-menu-open { overflow: hidden; }
+    </style>
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="fixed top-0 left-0 right-0 z-50 bg-slate-900/80 backdrop-blur-md border-b border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between items-center h-16">
+                <a href="index.html" class="logo-brand">
+                    <img src="resources/odyxy_logo.png" alt="Odyxy Logo">
+                    <span class="brand-name">Odyxy</span>
+                </a>
+                <div class="hidden md:flex space-x-8">
+                    <a href="index.html" class="nav-link text-sm font-medium">Home</a>
+                    <a href="index.html#features" class="nav-link text-sm font-medium">Features</a>
+                    <a href="organizations.html" class="nav-link text-sm font-medium">For Organizations</a>
+                    <a href="advertisers.html" class="nav-link text-sm font-medium text-neural-teal">For Advertisers</a>
+                    <a href="privacy.html" class="nav-link text-sm font-medium">Privacy & Trust</a>
+                    <a href="contact.html" class="nav-link text-sm font-medium">Contact</a>
+                </div>
+                <button class="md:hidden text-white" id="mobile-menu-btn">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path>
+                    </svg>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="pt-24 pb-16 bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h1 class="font-display text-4xl md:text-6xl font-bold mb-6">
+                    Reach Real Audiences Through 
+                    <span class="text-gradient">Context, Not Tracking</span>
+                </h1>
+                <p class="text-xl md:text-2xl text-slate-300 max-w-4xl mx-auto leading-relaxed">
+                    The world's first ethical advertising environment. Connect with engaged communities through 
+                    relevant discussions, not invasive tracking. Build trust while driving meaningful engagement.
+                </p>
+            </div>
+            
+            <div class="grid lg:grid-cols-2 gap-12 items-center">
+                <div class="reveal-element stagger-delay-1">
+                    <img src="resources/ethical-advertising.png" alt="Ethical Advertising" class="w-full rounded-2xl shadow-2xl">
+                </div>
+                
+                <div class="reveal-element stagger-delay-2">
+                    <h2 class="font-display text-3xl font-semibold mb-6">
+                        Advertising That Builds Trust
+                    </h2>
+                    <p class="text-lg text-slate-300 mb-8 leading-relaxed">
+                        In a world of ad-blockers and privacy concerns, Odyxy offers a revolutionary approach. 
+                        Your brand appears next to relevant, verified discussions where users are genuinely engaged and receptive.
+                    </p>
+                    
+                    <div class="space-y-4 mb-8">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Context-based placement, no user tracking</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">100% on-device analytics</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Sponsor educational and innovation arenas</span>
+                        </div>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-3 h-3 bg-organic-green rounded-full"></div>
+                            <span class="text-slate-300">Measure meaningful actions, not impressions</span>
+                        </div>
+                    </div>
+                    
+                    <button class="cta-button" onclick="scrollToSection('comparison-demo')">
+                        See the Difference
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Comparison Demo Section -->
+    <section id="comparison-demo" class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Traditional Ads vs. Odyxy Contextual Advertising
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    Experience the difference between invasive tracking and ethical contextual placement.
+                </p>
+            </div>
+            
+            <div class="comparison-container reveal-element stagger-delay-1">
+                <div class="grid md:grid-cols-2">
+                    <div class="comparison-side traditional-side">
+                        <h3 class="font-display text-2xl font-semibold mb-4 text-red-400">
+                            Traditional Advertising
+                        </h3>
+                        <p class="text-slate-300 mb-6">
+                            Users are tracked across the internet, building detailed profiles for targeted advertising.
+                        </p>
+                        
+                        <div class="ad-demo traditional-ad">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 bg-blue-500 rounded mr-3"></div>
+                                <div>
+                                    <div class="font-semibold text-sm">TechCorp</div>
+                                    <div class="text-xs text-gray-500">Sponsored</div>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-700 mb-2">
+                                "Buy our latest smartphone! We know you've been researching phones, visited 3 tech sites, and are due for an upgrade."
+                            </p>
+                            <div class="text-xs text-gray-500">
+                                Based on: browsing history, location data, purchase history, social media activity
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3 mt-6">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                                <span class="text-sm text-slate-300">Cross-site tracking</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                                <span class="text-sm text-slate-300">Personal data collection</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                                <span class="text-sm text-slate-300">Privacy violations</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-red-500 rounded-full"></div>
+                                <span class="text-sm text-slate-300">Ad-blocker target</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="comparison-side odyxy-side">
+                        <h3 class="font-display text-2xl font-semibold mb-4 text-organic-green">
+                            Odyxy Contextual Advertising
+                        </h3>
+                        <p class="text-slate-300 mb-6">
+                            Ads appear based on discussion context, with zero user tracking or data collection.
+                        </p>
+                        
+                        <div class="ad-demo odyxy-ad">
+                            <div class="flex items-center mb-2">
+                                <div class="w-8 h-8 bg-green-500 rounded mr-3"></div>
+                                <div>
+                                    <div class="font-semibold text-sm">EcoTech Solutions</div>
+                                    <div class="text-xs text-gray-500">Contextual Partner</div>
+                                </div>
+                            </div>
+                            <p class="text-sm text-gray-700 mb-2">
+                                "Supporting sustainable technology discussions. Learn about our carbon-neutral computing solutions."
+                            </p>
+                            <div class="text-xs text-gray-500">
+                                Based on: discussion topic "Climate Technology" • No user data collected
+                            </div>
+                        </div>
+                        
+                        <div class="space-y-3 mt-6">
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-organic-green rounded-full"></div>
+                                <span class="text-sm text-slate-300">Context-based placement</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-organic-green rounded-full"></div>
+                                <span class="text-sm text-slate-300">Zero user tracking</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-organic-green rounded-full"></div>
+                                <span class="text-sm text-slate-300">Privacy respected</span>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <div class="w-2 h-2 bg-organic-green rounded-full"></div>
+                                <span class="text-sm text-slate-300">Ad-blocker friendly</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="text-center mt-12 reveal-element stagger-delay-2">
+                <button class="cta-button" onclick="toggleComparison()">
+                    Switch Perspective
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="py-20 bg-slate-800/30">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Why Brands Choose Ethical Advertising
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    Join forward-thinking brands that prioritize trust, privacy, and meaningful engagement.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="benefit-card reveal-element stagger-delay-1">
+                    <div class="benefit-icon">🎯</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Higher Engagement</h3>
+                    <p class="text-slate-300 mb-6">
+                        Contextually relevant ads achieve 3x higher engagement rates because they align with user interests in the moment.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">300% Better Performance</div>
+                </div>
+                
+                <div class="benefit-card reveal-element stagger-delay-2">
+                    <div class="benefit-icon">🛡️</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Brand Safety</h3>
+                    <p class="text-slate-300 mb-6">
+                        Your brand appears alongside verified, high-quality discussions. No risk of appearing next to inappropriate content.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">100% Brand Safe</div>
+                </div>
+                
+                <div class="benefit-card reveal-element stagger-delay-3">
+                    <div class="benefit-icon">📊</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Meaningful Metrics</h3>
+                    <p class="text-slate-300 mb-6">
+                        Measure engagement quality, discussion participation, and brand sentiment rather than superficial impressions.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Quality Over Quantity</div>
+                </div>
+                
+                <div class="benefit-card reveal-element stagger-delay-4">
+                    <div class="benefit-icon">🤝</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Trust Building</h3>
+                    <p class="text-slate-300 mb-6">
+                        Privacy-respecting advertising builds long-term customer trust and loyalty. Your brand becomes synonymous with respect.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Enhanced Reputation</div>
+                </div>
+                
+                <div class="benefit-card reveal-element stagger-delay-5">
+                    <div class="benefit-icon">🌍</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Global Reach</h3>
+                    <p class="text-slate-300 mb-6">
+                        Connect with engaged communities worldwide without compromising on privacy standards or ethical principles.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Worldwide Access</div>
+                </div>
+                
+                <div class="benefit-card reveal-element stagger-delay-4">
+                    <div class="benefit-icon">💡</div>
+                    <h3 class="font-display text-xl font-semibold mb-4">Innovation Leadership</h3>
+                    <p class="text-slate-300 mb-6">
+                        Position your brand at the forefront of ethical technology adoption. Lead the conversation about privacy and responsibility.
+                    </p>
+                    <div class="text-sm text-neural-teal font-medium">Future-Ready</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Metrics Section -->
+    <section class="py-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    The Ethical Advertising Advantage
+                </h2>
+                <p class="text-xl text-slate-300 max-w-3xl mx-auto">
+                    Real metrics from brands that have made the switch to contextual advertising.
+                </p>
+            </div>
+            
+            <div class="grid md:grid-cols-4 gap-8">
+                <div class="metric-card reveal-element stagger-delay-1">
+                    <div class="metric-number">3.2x</div>
+                    <div class="text-slate-300 font-medium">Higher Engagement</div>
+                    <div class="text-sm text-slate-400 mt-2">vs. traditional ads</div>
+                </div>
+                
+                <div class="metric-card reveal-element stagger-delay-2">
+                    <div class="metric-number">89%</div>
+                    <div class="text-slate-300 font-medium">Brand Trust Increase</div>
+                    <div class="text-sm text-slate-400 mt-2">after switching</div>
+                </div>
+                
+                <div class="metric-card reveal-element stagger-delay-3">
+                    <div class="metric-number">0</div>
+                    <div class="text-slate-300 font-medium">Privacy Violations</div>
+                    <div class="text-sm text-slate-400 mt-2">guaranteed</div>
+                </div>
+                
+                <div class="metric-card reveal-element stagger-delay-4">
+                    <div class="metric-number">67%</div>
+                    <div class="text-slate-300 font-medium">Ad Blocker Bypass</div>
+                    <div class="text-sm text-slate-400 mt-2">acceptance rate</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Brand Partnership Form -->
+    <section class="py-20 bg-slate-800/30">
+        <div class="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-16 reveal-element">
+                <h2 class="font-display text-4xl md:text-5xl font-bold mb-6">
+                    Become a Brand Partner
+                </h2>
+                <p class="text-xl text-slate-300 max-w-2xl mx-auto">
+                    Ready to connect with engaged communities through ethical advertising? Let's discuss your brand's partnership journey.
+                </p>
+            </div>
+            
+            <div class="bg-slate-800/50 rounded-2xl p-8 reveal-element stagger-delay-1">
+                <form id="brand-partnership-form" class="space-y-6">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Company Name</label>
+                            <input type="text" class="form-input" placeholder="Enter your company name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Industry</label>
+                            <select class="form-input" required>
+                                <option value="">Select industry</option>
+                                <option value="technology">Technology</option>
+                                <option value="healthcare">Healthcare</option>
+                                <option value="finance">Finance</option>
+                                <option value="education">Education</option>
+                                <option value="environment">Environmental</option>
+                                <option value="retail">Retail</option>
+                                <option value="automotive">Automotive</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Contact Person</label>
+                            <input type="text" class="form-input" placeholder="Full name" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Position/Title</label>
+                            <input type="text" class="form-input" placeholder="Your role" required>
+                        </div>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Email Address</label>
+                            <input type="email" class="form-input" placeholder="contact@company.com" required>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Phone Number</label>
+                            <input type="tel" class="form-input" placeholder="+1 (555) 123-4567">
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Company Website</label>
+                        <input type="url" class="form-input" placeholder="https://www.yourcompany.com">
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Advertising Goals</label>
+                        <textarea class="form-input h-32 resize-none" placeholder="Describe your advertising objectives. What do you hope to achieve through ethical contextual advertising?" required></textarea>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-sm font-medium text-slate-300 mb-2">Target Audience</label>
+                        <textarea class="form-input h-24 resize-none" placeholder="Describe your ideal audience. What topics or discussions would align with your brand?" required></textarea>
+                    </div>
+                    
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Monthly Ad Budget</label>
+                            <select class="form-input" required>
+                                <option value="">Select budget range</option>
+                                <option value="small">$5,000 - $25,000</option>
+                                <option value="medium">$25,000 - $100,000</option>
+                                <option value="large">$100,000 - $500,000</option>
+                                <option value="enterprise">$500,000+</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-slate-300 mb-2">Timeline</label>
+                            <select class="form-input" required>
+                                <option value="">Select timeline</option>
+                                <option value="immediate">Ready to start immediately</option>
+                                <option value="month">Within the next month</option>
+                                <option value="quarter">Within the next quarter</option>
+                                <option value="year">Within the next year</option>
+                                <option value="exploring">Just exploring options</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="flex items-start space-x-3">
+                        <input type="checkbox" id="ethical-agreement" class="mt-1" required>
+                        <label for="ethical-agreement" class="text-sm text-slate-300">
+                            I commit to ethical advertising practices and agree to respect user privacy in all advertising activities on the Odyxy platform.
+                        </label>
+                    </div>
+                    
+                    <div class="text-center">
+                        <button type="submit" class="cta-button">
+                            Start Brand Partnership Discussion
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="py-12 border-t border-slate-700/50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center">
+                <div class="font-display text-2xl font-semibold text-gradient mb-4">
+                    Odyxy
+                </div>
+                <p class="text-slate-400 mb-4">
+                    The Intelligent Platform for Private, Purposeful Connection
+                </p>
+                <p class="text-sm text-slate-500">
+                    © 2025 Odyxy. Built with privacy, designed for humanity.
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Initialize reveal animations
+        document.addEventListener('DOMContentLoaded', function() {
+            const revealElements = document.querySelectorAll('.reveal-element');
+            
+            const revealObserver = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('revealed');
+                    }
+                });
+            }, {
+                threshold: 0.1,
+                rootMargin: '0px 0px -50px 0px'
+            });
+            
+            revealElements.forEach(element => {
+                revealObserver.observe(element);
+            });
+            
+            // Handle form submission
+            document.getElementById('brand-partnership-form').addEventListener('submit', handleFormSubmission);
+        });
+        
+        function toggleComparison() {
+            // Add animation to switch perspectives
+            const container = document.querySelector('.comparison-container');
+            
+            anime({
+                targets: container,
+                rotateY: '180deg',
+                duration: 600,
+                easing: 'easeInOutQuart',
+                complete: function() {
+                    setTimeout(() => {
+                        anime({
+                            targets: container,
+                            rotateY: '0deg',
+                            duration: 600,
+                            easing: 'easeInOutQuart'
+                        });
+                    }, 500);
+                }
+            });
+        }
+        
+        function handleFormSubmission(e) {
+            e.preventDefault();
+            
+            // Show success message
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = `
+                <div class="bg-slate-900 rounded-2xl p-8 max-w-md mx-4 border border-neural-teal">
+                    <div class="text-center">
+                        <div class="w-16 h-16 bg-organic-green rounded-full flex items-center justify-center mx-auto mb-4">
+                            <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                            </svg>
+                        </div>
+                        <h3 class="font-display text-2xl font-bold text-white mb-4">Thank You!</h3>
+                        <p class="text-slate-300 mb-6">
+                            Your brand partnership inquiry has been received. Our team will review your information and contact you within 24 hours.
+                        </p>
+                        <button onclick="closeModal()" class="cta-button">
+                            Continue Exploring
+                        </button>
+                    </div>
+                </div>
+            `;
+            
+            document.body.appendChild(modal);
+            
+            // Reset form
+            e.target.reset();
+        }
+        
+        function closeModal() {
+            const modal = document.querySelector('.fixed.inset-0');
+            if (modal) {
+                modal.remove();
+            }
+        }
+        
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            if (element) {
+                element.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+            }
+        }
+    </script>
+    <script src="main.js"></script>
+</body>
+</html>
